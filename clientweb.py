@@ -18,25 +18,21 @@ class Client(object):
         f.close()
         return htmlpage
 
-    def search_date(self, html):
+    def search_book(self, html):
         # buscar dades
         bs = bs4.BeautifulSoup(html, "lxml")
-        caixa = bs.find("div", "sg-featuredlink")
-        items = caixa.find_all("div", "featured-links-item")
-        results = []
-        for i in items:
-            time = i.find('time')["datetime"]
-            text = i.find('span', 'flink-title').text
-            results.append((time, text))
-        return results
+        caixa = bs.find("div", "dotd-title")
+        # llimpiar string
+        item = str(caixa.find("h2")).strip('<h2></h2>')
+        itemClean = item.strip()
+        return itemClean
 
 
     def main(self):
-        webpag = self.get_webpage('http://www.udl.cat')
-        results = self.search_date(webpag)
+        webpag = self.get_webpage('https://www.packtpub.com/packt/offers/free-learning')
+        results = self.search_book(webpag)
         # imprimir resultats
         print results
-        print len(results)
 
 if __name__ == "__main__":
     cw = Client()
